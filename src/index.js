@@ -401,37 +401,41 @@ export default class RNPickerSelect extends PureComponent {
   }
 
   renderTextInputOrChildren() {
-    const { children, style, textInputProps } = this.props;
-    const { selectedItem } = this.state;
+      const { children, style, textInputProps } = this.props;
+      const { selectedItem } = this.state;
 
-    const containerStyle =
-      Platform.OS === 'ios' ? style.inputIOSContainer : style.inputAndroidContainer;
+      const containerStyle =
+        Platform.OS === 'ios' ? style.inputIOSContainer : style.inputAndroidContainer;
 
-    if (children) {
+      if (children) {
+        return (
+          <View pointerEvents="box-only" style={containerStyle}>
+            {children}
+          </View>
+        );
+      }
+
       return (
         <View pointerEvents="box-only" style={containerStyle}>
-          {children}
+          <Text
+            numberOfLines={1}
+            testID="text_input"
+            style={[
+              Platform.OS === 'ios' ? style.inputIOS : style.inputAndroid,
+              this.getPlaceholderStyle(),
+            ]}
+            value={selectedItem.inputLabel ? selectedItem.inputLabel : selectedItem.label}
+            ref={this.setInputRef}
+            editable={false}
+            {...textInputProps}
+          >
+            {selectedItem.inputLabel ? selectedItem.inputLabel : selectedItem.label}
+          </Text>
+          {this.renderIcon()}
         </View>
       );
     }
 
-    return (
-      <View pointerEvents="box-only" style={containerStyle}>
-        <TextInput
-          testID="text_input"
-          style={[
-            Platform.OS === 'ios' ? style.inputIOS : style.inputAndroid,
-            this.getPlaceholderStyle(),
-          ]}
-          value={selectedItem.inputLabel ? selectedItem.inputLabel : selectedItem.label}
-          ref={this.setInputRef}
-          editable={false}
-          {...textInputProps}
-        />
-        {this.renderIcon()}
-      </View>
-    );
-  }
 
   renderIOS() {
     const { style, modalProps, pickerProps, touchableWrapperProps } = this.props;
