@@ -74,7 +74,7 @@ export default class RNPickerSelect extends PureComponent {
     style: {},
     children: null,
     useNativeAndroidPickerStyle: true,
-    fixAndroidTouchableBug: false,
+    fixAndroidTouchableBug: true,
     doneText: 'Done',
     onDonePress: null,
     onUpArrow: null,
@@ -508,7 +508,10 @@ export default class RNPickerSelect extends PureComponent {
     return (
       <Component
         testID="android_touchable_wrapper"
-        onPress={onOpen}
+        onPress={()=>{
+          console.log('Touchable')
+          this.togglePicker(true);
+        }}
         activeOpacity={1}
         {...touchableWrapperProps}
       >
